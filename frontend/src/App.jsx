@@ -1,21 +1,11 @@
-import Home from "./pages/Home";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import { Routes, Route } from "react-router-dom";
-
+import AppRoutes from "./AppRoutes";
+import { AuthProvider } from "./auth/AuthContext";
 function App() {
   return (
     <>
-      {/* <div className="w-full h-screen bg">
-        <SignIn />
-      </div> */}
-      <Routes>
-        <Route path="/">
-          <Route index element={<Home />} />
-          <Route path="signup" element={<SignUp />} />
-          <Route path="signin" element={<SignIn />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </>
   );
 }

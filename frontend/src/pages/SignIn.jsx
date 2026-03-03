@@ -1,18 +1,34 @@
 import { TextField, Button, Typography, Box } from "@mui/material";
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Axios from "../utils/axiox.utils";
+import { useContext } from "react";
+import { AuthContext } from "../auth/AuthContext";
+
 const SignIn = () => {
   const [input, setInput] = useState({ email: "", password: "" });
+  const { setAuthState } = useContext(AuthContext);
+
+  const navigate = useNavigate();
   const changeHandler = (e) => {
     setInput((prev) => {
       const { name, value } = e.target;
       return { ...prev, [name]: value };
     });
   };
-  const handler = (e) => {
+  const handler = async (e) => {
     e.preventDefault();
     console.log("Form submitted");
-    console.log(input);
+    const { data } = await Axios.post("/auth/signin", input);
+    console.log(data);
+    if (data.status) {
+      setInput({ name: "", email: "", password: "" });
+      alert(data.message);
+      setAuthState("valid");
+      // navigate("/");
+    } else {
+      alert(data.message);
+    }
   };
   return (
     <>

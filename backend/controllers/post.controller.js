@@ -15,6 +15,7 @@ class PostController {
       req.body.userId = req.userId;
       await this.dbService.create(this.post, req.body);
       return res.status(201).json({
+        status: true,
         message: "Post created successfully",
       });
     } catch (e) {
@@ -59,6 +60,32 @@ class PostController {
         .status(200)
         .json({ status: true, message: "Post Deleted Succesfully" });
     } catch (e) {
+      return next(e);
+    }
+  };
+  getAllPost = async (req, res, next) => {
+    try {
+      const postData = await this.dbService.findAll(this.post);
+      console.log(postData);
+      return res.status(200).json({ status: true, data: postData });
+    } catch (e) {
+      console.log(e);
+      return next(e);
+    }
+  };
+  updateLikeCount = async (req, res, next) => {
+    try {
+      const postId = req.params?.id;
+      if (!postId) {
+        throw new CustomError(200, "Id is not defined");
+      }
+      const postData = await this.dbService.findById(this.post, postId);
+      await this.dbService.update(this.post, postId, {
+        likeCount: postData.likeCount + 1,
+      });
+      return res.status(200).json({ status: true, data: postData });
+    } catch (e) {
+      console.log(e);
       return next(e);
     }
   };

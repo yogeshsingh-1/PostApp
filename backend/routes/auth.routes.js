@@ -1,6 +1,8 @@
 import express from "express";
 import passport from "passport";
 import AuthController from "../controllers/auth.controller.js";
+import CustomError from "../utils/customerError.js";
+import authMiddleware from "../middleware/auth.middleware.js";
 const router = express.Router();
 
 // router.get("/", (req, res) => {
@@ -13,6 +15,7 @@ const router = express.Router();
 router.post("/signup", AuthController.signup);
 router.post("/signin", AuthController.signIn);
 router.get("/logout", AuthController.logOut);
+
 // auth end
 
 router.get(
@@ -20,7 +23,7 @@ router.get(
   passport.authenticate("google", {
     scope: ["profile", "email"],
     prompt: "select_account",
-  }),
+  })
 );
 
 router.get(
@@ -28,7 +31,7 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: "/",
     successRedirect: "/profile",
-  }),
+  })
 );
 
 router.get("/profile", (req, res) => {

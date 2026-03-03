@@ -11,7 +11,7 @@ class DbService {
   }
 
   // GET ALL
-  async findAll(model, options = {}) {
+  async findAll(model, options = {raw:true,}) {
     return await model.findAll(options);
   }
 

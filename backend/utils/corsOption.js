@@ -2,7 +2,7 @@ const allowedOrigins = [
   "https://erp365.in",
   "https://erpqa.mygstcafe.com",
   "http://localhost:3000",
-  "https://localhost:3000",
+  "http://localhost:5173",
 ];
 const corsOption = (req, callback) => {
   const origin = req.headers.origin;

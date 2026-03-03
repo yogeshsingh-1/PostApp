@@ -18,11 +18,11 @@ class AuthController {
       }
       const user = await this.findByFieldName("email", email);
       if (user) {
-        throw new CustomError(404, "User email already exist");
+        throw new CustomError(200, "User email already exist");
       }
       const result = await this.dbService.create(this.user, req.body);
       const token = jwtUtils.createJWT({ id: result?.id });
-      res.cookie("token", token, cookieOption);
+      res.cookie("token", token, cookieOption());
       return res
         .status(201)
         .json({ status: true, message: "User created succesfully" });
@@ -38,10 +38,10 @@ class AuthController {
       }
       const user = await this.findByFieldName("email", email);
       if (!user) {
-        throw new CustomError(404, "User not found");
+        throw new CustomError(200, "User not found");
       }
       const token = jwtUtils.createJWT({ id: user?.id });
-      res.cookie("token", token, cookieOption);
+      res.cookie("token", token, cookieOption());
       return res
         .status(200)
         .json({ status: true, message: "Login Succesfully" });
@@ -51,7 +51,7 @@ class AuthController {
   };
   logOut = async (req, res) => {
     try {
-      res.clearCookie("token", cookieOption);
+      res.clearCookie("token", cookieOption());
       return res
         .status(200)
         .json({ status: true, message: "Logout succesfully" });
@@ -59,6 +59,7 @@ class AuthController {
       next(e);
     }
   };
+ 
   findByFieldName = async (fieldName, value) => {
     return await this.dbService.findByFieldName(this.user, fieldName, value);
   };

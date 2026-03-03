@@ -1,18 +1,30 @@
 import { TextField, Button, Typography, Box } from "@mui/material";
-import React, { useState } from "react";
-import {NavLink} from "react-router-dom"
+import { useState, useContext } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
+import Axios from "../utils/axiox.utils";
+import { AuthContext } from "../auth/AuthContext";
 const SignUp = () => {
   const [input, setInput] = useState({ name: "", email: "", password: "" });
+  const { setAuthState } = useContext(AuthContext);
+  const navigate = useNavigate();
   const changeHandler = (e) => {
     setInput((prev) => {
       const { name, value } = e.target;
       return { ...prev, [name]: value };
     });
   };
-  const handler = (e) => {
+  const handler = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
-    console.log(input);
+    const { data } = await Axios.post("/auth/signup", input);
+    console.log(data);
+    if (data.status) {
+      setInput({ name: "", email: "", password: "" });
+      alert(data.message);
+      navigate("/");
+      setAuthState("valid");
+    } else {
+      alert(data.message);
+    }
   };
   return (
     <>
@@ -64,10 +76,13 @@ const SignUp = () => {
           </Box>
         </form>
         <Typography
-          component={"p"} className="text-center text-sm! text-gray-700"
-          
+          component={"p"}
+          className="text-center text-sm! text-gray-700"
         >
-          Already have a account ? <NavLink to="/signin" className="text-blue-500">LogIn</NavLink>
+          Already have a account ?{" "}
+          <NavLink to="/signin" className="text-blue-500">
+            LogIn
+          </NavLink>
         </Typography>
       </div>
     </>

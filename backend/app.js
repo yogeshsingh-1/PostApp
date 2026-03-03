@@ -5,6 +5,7 @@ import "./models/index.js"; // load models
 import authRouter from "./routes/auth.routes.js";
 import postRouter from "./routes/post.routes.js";
 import authMiddleware from "./middleware/auth.middleware.js";
+import verifyRouter from "./routes/verify.routes.js"
 const port = process.env.PORT || 5000;
 
 // 1 Connect DB
@@ -15,12 +16,13 @@ await connectDB();
 // app.use("/api/v1/", authMiddleware, postRouter);
 
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/verify", authMiddleware, verifyRouter);
 app.use("/api/v1/post", authMiddleware, postRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
   return res.status(err.status ?? 500).json({
-    success: false,
+    status: false,
     message: err.message || "Something went wrong",
   });
 });
