@@ -16,7 +16,6 @@ const SignUp = () => {
   const handler = async (e) => {
     e.preventDefault();
     const { data } = await Axios.post("/auth/signup", input);
-    console.log(data);
     if (data.status) {
       setInput({ name: "", email: "", password: "" });
       alert(data.message);
@@ -28,62 +27,66 @@ const SignUp = () => {
   };
   return (
     <>
-      <div className="border w-[50%] h-[60vh] -translate-x-[50%] -translate-y-[50%] absolute top-[50%] left-[50%] mx-auto! bg-gray-200 ">
-        <Typography
-          component={"h3"}
-          className="text-center mb-4! text-2xl! font-bold! mt-3!"
-        >
-          SignUp
-        </Typography>
-        <form onSubmit={handler}>
-          <Box className="w-2/3 mx-auto mb-3">
-            <TextField
-              fullWidth
-              onChange={changeHandler}
-              label="Name"
-              placeholder="Name"
-              name="name"
-              value={input.name}
-              required
-            />
-          </Box>
-          <Box className="w-2/3 mx-auto mb-3">
-            <TextField
-              onChange={changeHandler}
-              label="Email"
-              placeholder="Email"
-              name="email"
-              value={input.email}
-              fullWidth
-              required
-            />
-          </Box>
-          <Box className="w-2/3 mx-auto mb-3">
-            <TextField
-              onChange={changeHandler}
-              label="Password"
-              placeholder="Password"
-              name="password"
-              value={input.password}
-              fullWidth
-              required
-            />
-          </Box>
-          <Box className="w-2/3 mx-auto mb-3">
-            <Button fullWidth type="submit" variant={"contained"}>
-              SignUp
-            </Button>
-          </Box>
-        </form>
-        <Typography
-          component={"p"}
-          className="text-center text-sm! text-gray-700"
-        >
-          Already have a account ?{" "}
-          <NavLink to="/signin" className="text-blue-500">
-            LogIn
-          </NavLink>
-        </Typography>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 ">
+          <Typography
+            component={"h3"}
+            className="text-center mb-4! text-2xl! font-bold! mt-3!"
+          >
+            SignUp
+          </Typography>
+          <form onSubmit={handler}>
+            <Box className=" mb-3">
+              <TextField
+                fullWidth
+                onChange={changeHandler}
+                label="Name"
+                placeholder="Name"
+                name="name"
+                value={input.name}
+                required
+              />
+            </Box>
+            <Box className=" mb-3">
+              <TextField
+                onChange={changeHandler}
+                label="Email"
+                placeholder="Email"
+                name="email"
+                value={input.email}
+                fullWidth
+                required
+                type="email"
+              />
+            </Box>
+            <Box className=" mb-3">
+              <TextField
+                onChange={changeHandler}
+                label="Password"
+                placeholder="Password"
+                name="password"
+                value={input.password}
+                fullWidth
+                required
+                type="password"
+              />
+            </Box>
+            <Box className=" mb-3">
+              <Button fullWidth type="submit" variant={"contained"}>
+                SignUp
+              </Button>
+            </Box>
+          </form>
+          <Typography
+            component={"p"}
+            className="text-center text-sm! text-gray-700"
+          >
+            Already have a account ?{" "}
+            <NavLink to="/signin" className="text-blue-600 font-medium">
+              LogIn
+            </NavLink>
+          </Typography>
+        </div>
       </div>
     </>
   );

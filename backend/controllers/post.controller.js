@@ -5,6 +5,7 @@ class PostController {
   constructor() {
     this.dbService = new DbService();
     this.post = db.models.Post;
+    this.user = db.models.User;
   }
   add = async (req, res, next) => {
     try {
@@ -28,7 +29,9 @@ class PostController {
       if (!postId) {
         throw new CustomError(404, "Id is not defined");
       }
-      const postData = await this.dbService.findById(this.post, postId);
+      const postData = await this.dbService.findById(this.post, postId, {
+        include: [{ model: this.user, attributes: ["name"] }],
+      });
       return res.status(200).json({ status: true, data: postData });
     } catch (e) {
       return next(e);
@@ -44,7 +47,7 @@ class PostController {
       await this.dbService.update(this.post, postId, requestBody);
       return res
         .status(200)
-        .json({ status: true, message: "Post Update Succesfully" });
+        .json({ status: true, message: "Post Updated Succesfully" });
     } catch (e) {
       return next(e);
     }
@@ -65,8 +68,9 @@ class PostController {
   };
   getAllPost = async (req, res, next) => {
     try {
-      const postData = await this.dbService.findAll(this.post);
-      console.log(postData);
+      const postData = await this.dbService.findAll(this.post, {
+        include: [{ model: this.user, attributes: ["name"] }],
+      });
       return res.status(200).json({ status: true, data: postData });
     } catch (e) {
       console.log(e);

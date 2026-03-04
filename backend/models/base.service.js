@@ -11,13 +11,13 @@ class DbService {
   }
 
   // GET ALL
-  async findAll(model, options = {raw:true,}) {
+  async findAll(model, options = { raw: true }) {
     return await model.findAll(options);
   }
 
   // GET BY ID
-  async findById(model, id) {
-    return await model.findByPk(id, { raw: true });
+  async findById(model, id, options = {}) {
+    return await model.findByPk(id, options);
   }
 
   // UPDATE

@@ -1,55 +1,58 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
-import { Button, Box, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Button, Typography } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import Logout from "../pages/Logout";
+
 const Navbar = () => {
   const navigate = useNavigate();
-  const { authState, setAuthState } = useContext(AuthContext);
-  const handleLogout = () => {
-    setAuthState("invalid");
-    navigate("/signin");
-  };
+  const location = useLocation();
+  const { authState } = useContext(AuthContext);
+
+  const isActive = (path) =>
+    location.pathname === path
+      ? "text-blue-600 font-semibold"
+      : "text-gray-700";
+
   return (
-    <div className="bg-gray-300 w-full h-15 flex justify-between items-center px-10">
-      {/* logo */}
+    <div className="w-full h-16 bg-white shadow-md px-8 flex justify-between items-center ">
+      {/* Logo */}
       <Typography
         variant="h5"
-        className="font-semibold! cursor-pointer"
         onClick={() => navigate("/")}
+        className="cursor-pointer font-bold tracking-tight text-zinc-800 hover:text-blue-600 transition"
       >
         Blogger
       </Typography>
-      {/* side bar */}
-      <div className="flex items-center">
-        <Box>
-          <Button
-            variant="text"
-            className="text-xs! font-semibold! text-gray-950! mr-7! opacity-90 "
-            onClick={() => navigate("/post")}
-          >
-            Post
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            variant="text"
-            className="text-xs! font-semibold! text-gray-950! mr-7! opacity-90 "
-            onClick={() => navigate("/post/new")}
-          >
-            Add Post
-          </Button>
-        </Box>
+
+      {/* Navigation */}
+      <div className="flex items-center gap-6">
+        <Button
+          variant="text"
+          className={`normal-case ${isActive("/post")}`}
+          onClick={() => navigate("/post")}
+        >
+          Posts
+        </Button>
+
+        <Button
+          variant="text"
+          className={`normal-case ${isActive("/post/new")}`}
+          onClick={() => navigate("/post/new")}
+        >
+          Add Post
+        </Button>
+
         {authState === "valid" ? (
-          <Box>
-            <Logout />
-          </Box>
+          <Logout />
         ) : (
-          <Box>
-            <Button variant="outlined" onClick={() => navigate("/signin")}>
-              SignIn
-            </Button>
-          </Box>
+          <Button
+            variant="contained"
+            className="normal-case rounded-lg"
+            onClick={() => navigate("/signin")}
+          >
+            Sign In
+          </Button>
         )}
       </div>
     </div>

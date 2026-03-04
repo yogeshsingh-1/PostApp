@@ -8,6 +8,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import Posts from "./pages/Posts";
 import PostEdit from "./pages/PostEdit";
 import NewPost from "./pages/NewPost";
+import SinglePost from "./pages/SinglePost";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/post" element={<Posts />} />
         <Route path="/post/new" element={<NewPost />} />
+        <Route path="/post/:id" element={<SinglePost />} />
         <Route path="/post/update/:postId" element={<PostEdit />} />
         <Route path="/logout" element={<Logout />} />
       </Route>

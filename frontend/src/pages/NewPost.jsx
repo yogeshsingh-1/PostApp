@@ -18,7 +18,6 @@ const NewPost = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     const { data } = await Axios.post("/post", postState);
-    console.log(data);
     if (data.status) {
       alert(data.message);
       navigate("/post");
@@ -57,7 +56,6 @@ const NewPost = () => {
               name="imageUrl"
               label="ImageUrl"
               fullWidth
-              required
               value={postState.imageUrl}
             />
           </Box>

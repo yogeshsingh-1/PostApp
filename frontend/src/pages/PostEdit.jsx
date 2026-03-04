@@ -26,8 +26,6 @@ const PostEdit = () => {
             image: data.data.imageUrl,
           });
         }
-
-        console.log(data.data);
         setLoading(false);
       } catch (err) {
         console.error("Failed to fetch post", err);
@@ -45,14 +43,13 @@ const PostEdit = () => {
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await Axios.put(`/post/${postId}`, post);
-      alert("Post updated successfully!");
-      navigate("/"); // redirect home
-    } catch (err) {
-      console.error("Update failed", err);
-      alert("Failed to update post");
-    }
+      const { data } = await Axios.put(`/post/${postId}`, post);
+      if (!data.status) {
+        alert(data.message);
+      }
+      alert(data.message);
+      navigate("/post"); // redirect home
+   
   };
 
   if (loading) return <p>Loading post...</p>;

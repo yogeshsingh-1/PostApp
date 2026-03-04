@@ -1,84 +1,95 @@
 import { TextField, Button, Typography, Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Axios from "../utils/axiox.utils";
-import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
 
 const SignIn = () => {
   const [input, setInput] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const { setAuthState } = useContext(AuthContext);
-
   const navigate = useNavigate();
+
   const changeHandler = (e) => {
-    setInput((prev) => {
-      const { name, value } = e.target;
-      return { ...prev, [name]: value };
-    });
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
   };
+
   const handler = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
-    const { data } = await Axios.post("/auth/signin", input);
-    console.log(data);
-    if (data.status) {
-      setInput({ name: "", email: "", password: "" });
-      alert(data.message);
-      setAuthState("valid");
-      // navigate("/");
-    } else {
-      alert(data.message);
+    try {
+      setLoading(true);
+      const { data } = await Axios.post("/auth/signin", input);
+
+      if (data.status) {
+        setInput({ email: "", password: "" });
+        setAuthState("valid");
+        navigate("/");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
-    <>
-      <div className="border w-[50%] h-[50vh] -translate-x-[50%] -translate-y-[50%] absolute top-[50%] left-[50%] mx-auto! bg-gray-200 ">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8">
         <Typography
-          component={"h3"}
-          className="text-center mb-4! text-2xl! font-bold! mt-3!"
+          component="h2"
+          className="text-center text-2xl! font-bold! mb-4! tracking-tight"
         >
-          LogIn
+          Sign In
         </Typography>
+
         <form onSubmit={handler}>
-          <Box className="w-2/3 mx-auto mb-3">
+          <Box className="mb-4">
             <TextField
-              onChange={changeHandler}
               label="Email"
-              placeholder="Email"
               name="email"
               value={input.email}
+              onChange={changeHandler}
               fullWidth
               required
+              type="email"
             />
           </Box>
-          <Box className="w-2/3 mx-auto mb-3">
+
+          <Box className="mb-4">
             <TextField
-              onChange={changeHandler}
               label="Password"
-              placeholder="Password"
+              type="password"
               name="password"
               value={input.password}
+              onChange={changeHandler}
               fullWidth
               required
             />
           </Box>
-          <Box className="w-2/3 mx-auto mb-3">
-            <Button fullWidth type="submit" variant={"contained"}>
-              SignIn
-            </Button>
-          </Box>
+
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            className="normal-case py-2 rounded-lg"
+          >
+            {loading ? "Signing In..." : "Sign In"}
+          </Button>
         </form>
-        <Typography
-          component={"p"}
-          className="text-center text-sm! text-gray-700"
-        >
-          Create a new account ?{" "}
-          <NavLink to="/signup" className="text-blue-500">
-            SignUp
+
+        <Typography className="text-center text-sm! text-gray-600 mt-4!">
+          Create a new account?{" "}
+          <NavLink to="/signup" className="text-blue-600 font-medium">
+            Sign Up
           </NavLink>
         </Typography>
       </div>
-    </>
+    </div>
   );
 };
 

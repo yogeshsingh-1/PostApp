@@ -6,7 +6,6 @@ const Logout = () => {
   const { setAuthState } = useContext(AuthContext);
 
   const handleLogout = async () => {
-    console.log("hello");
     const { data } = await Axios.get("/auth/logout");
     setAuthState("invalid");
   };
