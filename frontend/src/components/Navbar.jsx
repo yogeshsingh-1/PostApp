@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import { Button, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-import Logout from "../pages/Logout";
+import { Dashboard } from "@mui/icons-material";
+import DashboardMenu from "./DashboardMenu";
+// import Logout from "../pages/Logout";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -44,7 +46,8 @@ const Navbar = () => {
         </Button>
 
         {authState === "valid" ? (
-          <Logout />
+          // <Logout />
+          <DashboardMenu />
         ) : (
           <Button
             variant="contained"

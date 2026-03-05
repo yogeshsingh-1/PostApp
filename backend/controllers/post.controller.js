@@ -6,6 +6,7 @@ class PostController {
     this.dbService = new DbService();
     this.post = db.models.Post;
     this.user = db.models.User;
+    this.like = db.models.Like;
   }
   add = async (req, res, next) => {
     try {
@@ -44,6 +45,10 @@ class PostController {
       if (!postId) {
         throw new CustomError(404, "Id is not defined");
       }
+      const postData = await this.dbService.findById(this.post, postId);
+      if (postData.userId !== req.userId) {
+        throw new CustomError(403, "You are not author of this post");
+      }
       await this.dbService.update(this.post, postId, requestBody);
       return res
         .status(200)
@@ -68,9 +73,23 @@ class PostController {
   };
   getAllPost = async (req, res, next) => {
     try {
+      // required: false
+      // Parent data (Post) हमेशा आएगा, चाहे child table (Like) में record हो या ना हो।
+      // SQL में यह LEFT JOIN जैसा behave करता है।
       const postData = await this.dbService.findAll(this.post, {
-        include: [{ model: this.user, attributes: ["name"] }],
+        include: [
+          { model: this.user, attributes: ["name"] },
+          {
+            model: this.like,
+            attributes: ["likeId", "userId"],
+            where: {
+              userId: req.userId,
+            },
+            required: false,
+          },
+        ],
       });
+
       return res.status(200).json({ status: true, data: postData });
     } catch (e) {
       console.log(e);
@@ -90,6 +109,31 @@ class PostController {
       return res.status(200).json({ status: true, data: postData });
     } catch (e) {
       console.log(e);
+      return next(e);
+    }
+  };
+  getUserData = async (req, res, next) => {
+    try {
+      const userId = req.params?.userId;
+      if (!userId) {
+        throw new CustomError(200, "Id is not defined");
+      }
+      const postData = await this.dbService.findAll(this.post, {
+        where: { userId: userId },
+        include: [
+          { model: this.user, attributes: ["name", "id"] },
+          {
+            model: this.like,
+            attributes: ["likeId", "userId"],
+            where: {
+              userId: req.userId,
+            },
+            required: false,
+          },
+        ],
+      });
+      return res.status(200).json({ status: true, data: postData });
+    } catch (e) {
       return next(e);
     }
   };

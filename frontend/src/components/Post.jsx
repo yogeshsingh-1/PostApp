@@ -1,34 +1,44 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Favorite, FavoriteBorder, Edit, Delete } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import EditOffIcon from "@mui/icons-material/EditOff";
 const Post = ({ post }) => {
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
+  const id = localStorage.getItem("id");
+  const shortDesc =
+    post.description.length > 60
+      ? post.description.slice(0, 60) + "..."
+      : post.description;
+  const toggleLike = async () => {
+    // setLiked((prev) => !prev);
+    await Axios.post("/like", { postId: post.postId });
+  };
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+    <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
       <div
-        className="h-52 overflow-hidden cursor-pointer"
+        className="h-52 overflow-hidden"
         onDoubleClick={() => navigate(`/post/${post.postId}`)}
       >
         <img
-          src={post.imageUrl}
+          src={`${post.imageUrl}?w=500`}
           alt="post"
-          className="w-full h-full object-cover hover:scale-125 transition duration-500 ease-in-out"
+          loading="lazy"
+          className="w-full h-full object-cover hover:scale-105 transition duration-500 ease-in-out "
         />
       </div>
       <div className="p-5">
         <h2
-          className="text-lg font-bold mb-2 text-zinc-500 cursor-pointer whitespace-nowrap"
+          className="text-lg font-bold mb-2 text-zinc-500 cursor-pointer whitespace-nowrap tracking-tighter"
           onClick={() => navigate(`/post/${post.postId}`)}
         >
           {post.title}
         </h2>
-        <p className="text-gray-600 text-sm mb-4 tracking-tighter">
-          {post.description.length > 58
-            ? post.description.slice(0, 70) + "..."
-            : post.description}
+        <p className="text-gray-500 text-sm mb-4 leading-relaxed tracking-tight">
+          {shortDesc}
         </p>
 
         <p className="text-xs text-gray-400 mb-3">
@@ -39,22 +49,35 @@ const Post = ({ post }) => {
         </p>
 
         <div className="flex justify-between items-center">
-          <IconButton onClick={() => setLiked(!liked)}>
-            {liked ? <Favorite className="text-red-500" /> : <FavoriteBorder />}
-            {post.likeCount > 0 ? (
-              <p className="text-sm">{post.likeCount}</p>
-            ) : null}
+          <IconButton onClick={toggleLike}>
+            {post.Likes[0]?.userId === parseInt(id) ? (
+              <Favorite className="text-red-500" />
+            ) : (
+              <FavoriteBorder />
+            )}
           </IconButton>
 
           <div className="flex gap-2">
-            <IconButton>
-              <Edit
-                className="text-blue-500 cursor-pointer"
-                onClick={() => navigate(`/post/update/${post.postId}`)}
-              />
+            {/* chat */}
+            <IconButton
+              onClick={() => navigate(`/post/${post.postId}#comment`)}
+            >
+              {/* <Delete className="text-red-500" /> */}
+              <ChatBubbleOutlineIcon />
             </IconButton>
+            {/* Edit */}
             <IconButton>
-              <Delete className="text-red-500" />
+              {post.userId === parseInt(id) ? (
+                <Edit
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => navigate(`/post/update/${post.postId}`)}
+                />
+              ) : (
+                <EditOffIcon
+                  className="text-zinc-300 cursor-not-allowed"
+                  title="You are not allowed to edit this post"
+                />
+              )}
             </IconButton>
           </div>
         </div>
@@ -63,4 +86,4 @@ const Post = ({ post }) => {
   );
 };
 
-export default Post;
+export default React.memo(Post);

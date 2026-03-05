@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Axios from "../utils/axiox.utils";
 import Comment from "../components/Comment";
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, refresh }) => {
   const [commentData, setCommentData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +17,6 @@ const Comments = ({ postId }) => {
           alert(data.message);
           return;
         }
-
         setCommentData(data.data || []);
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -29,7 +28,7 @@ const Comments = ({ postId }) => {
     if (postId) {
       fetchComments();
     }
-  }, [postId]);
+  }, [postId, refresh]);
 
   if (loading) {
     return <div className="mt-4 text-center">Loading comments...</div>;

@@ -7,7 +7,7 @@ import { AuthContext } from "../auth/AuthContext";
 const SignIn = () => {
   const [input, setInput] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
-  const { setAuthState } = useContext(AuthContext);
+  const { setAuthState, verifyUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const changeHandler = (e) => {
@@ -24,6 +24,7 @@ const SignIn = () => {
       if (data.status) {
         setInput({ email: "", password: "" });
         setAuthState("valid");
+        await verifyUser();
         navigate("/");
       } else {
         alert(data.message);
@@ -68,6 +69,7 @@ const SignIn = () => {
               onChange={changeHandler}
               fullWidth
               required
+              autoComplete="true"
             />
           </Box>
 

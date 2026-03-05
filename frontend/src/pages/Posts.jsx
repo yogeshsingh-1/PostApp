@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "../components/Post";
 import Axios from "../utils/axiox.utils";
 const Posts = () => {
@@ -55,11 +55,10 @@ const Posts = () => {
       }
     })();
   }, []);
-
   return (
-    <div className="max-w-[85vw] mx-auto mt-15 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div className="max-w-[85vw] mx-auto  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 py-10 ">
       {postData.map((post) => (
-        <Post key={post.postId} post={post} />
+        <Post key={post.postId} post={post} admin={post} />
       ))}
     </div>
   );

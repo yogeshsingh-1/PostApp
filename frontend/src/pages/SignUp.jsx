@@ -5,7 +5,7 @@ import Axios from "../utils/axiox.utils";
 import { AuthContext } from "../auth/AuthContext";
 const SignUp = () => {
   const [input, setInput] = useState({ name: "", email: "", password: "" });
-  const { setAuthState } = useContext(AuthContext);
+  const { setAuthState, verifyUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const changeHandler = (e) => {
     setInput((prev) => {
@@ -21,6 +21,7 @@ const SignUp = () => {
       alert(data.message);
       navigate("/");
       setAuthState("valid");
+      await verifyUser();
     } else {
       alert(data.message);
     }
@@ -81,7 +82,7 @@ const SignUp = () => {
             component={"p"}
             className="text-center text-sm! text-gray-700"
           >
-            Already have a account ?{" "}
+            Already have an account ?{" "}
             <NavLink to="/signin" className="text-blue-600 font-medium">
               LogIn
             </NavLink>

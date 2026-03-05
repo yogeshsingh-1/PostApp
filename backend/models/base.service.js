@@ -21,10 +21,10 @@ class DbService {
   }
 
   // UPDATE
-  async update(model, id, data) {
-    const record = await model.findByPk(id);
+  async update(model, id, data, options = {}) {
+    const record = await model.findByPk(id,options);
     if (!record) throw new CustomError(404, "Record not found");
-    const updated = await record.update(data);
+    const updated = await record.update(data, options);
     return updated.toJSON();
   }
 
