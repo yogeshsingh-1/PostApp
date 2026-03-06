@@ -4,19 +4,33 @@ import { IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import EditOffIcon from "@mui/icons-material/EditOff";
+import Axios from "../utils/axiox.utils";
+
 const Post = ({ post }) => {
   const navigate = useNavigate();
-  const [liked, setLiked] = useState(false);
+  // const [liked, setLiked] = useState(false);
   const id = localStorage.getItem("id");
+  const [liked, setLiked] = useState(post.Likes[0]?.userId === parseInt(id));
+  const [likeCount, setLikeCount] = useState(post.likeCount);
+
   const shortDesc =
     post.description.length > 60
       ? post.description.slice(0, 60) + "..."
       : post.description;
   const toggleLike = async () => {
-    // setLiked((prev) => !prev);
-    await Axios.post("/like", { postId: post.postId });
-  };
+    setLiked((prev) => !prev);
+    if (liked) {
+      setLikeCount(likeCount - 1);
+    } else {
+      setLikeCount(likeCount + 1);
+    }
 
+    try {
+      await Axios.post("/like", { postId: post.postId });
+    } catch {
+      setLiked((prev) => !prev);
+    }
+  };
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition duration-300">
       <div
@@ -49,11 +63,10 @@ const Post = ({ post }) => {
         </p>
 
         <div className="flex justify-between items-center">
-          <IconButton onClick={toggleLike}>
-            {post.Likes[0]?.userId === parseInt(id) ? (
-              <Favorite className="text-red-500" />
-            ) : (
-              <FavoriteBorder />
+          <IconButton onClick={toggleLike} className="flex items-center gap-1">
+            {liked ? <Favorite className="text-red-500" /> : <FavoriteBorder />}
+            {likeCount > 0 && (
+              <span className="text-sm text-zinc-300">{likeCount}</span>
             )}
           </IconButton>
 

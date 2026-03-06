@@ -2,7 +2,6 @@ import { raw } from "express";
 import CustomError from "../utils/customerError.js";
 
 class DbService {
-  constructor() {}
 
   // CREATE
   async create(model, data) {
@@ -22,7 +21,7 @@ class DbService {
 
   // UPDATE
   async update(model, id, data, options = {}) {
-    const record = await model.findByPk(id,options);
+    const record = await model.findByPk(id, options);
     if (!record) throw new CustomError(404, "Record not found");
     const updated = await record.update(data, options);
     return updated.toJSON();
@@ -43,6 +42,10 @@ class DbService {
       where: { [fieldName]: value },
       raw: true,
     });
+    return record;
+  }
+  async findOne(model, where, option = {}) {
+    const record = await model.findOne(where, option);
     return record;
   }
 }
