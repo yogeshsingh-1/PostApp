@@ -84,16 +84,9 @@ const SinglePost = () => {
             {postData.description}
           </div>
           <div className="mt-2 ">
-            <div className="flex items-center">
-              <IconButton>
-                <AccountCircleRoundedIcon></AccountCircleRoundedIcon>
-              </IconButton>
-              <span className="text-sm font-semibold text-gray-800 tracking-tight normal-case!">
-                {postData.User?.name}
-              </span>
-            </div>
             <div className="flex justify-between">
-              <IconButton
+              {/* like */}
+              {/* <IconButton
                 onClick={() => setLike(!like)}
                 className=" hover:bg-gray-300!"
               >
@@ -102,7 +95,15 @@ const SinglePost = () => {
                 ) : (
                   <FavoriteBorder />
                 )}
-              </IconButton>
+              </IconButton> */}
+              <div className="flex items-center">
+                <IconButton>
+                  <AccountCircleRoundedIcon></AccountCircleRoundedIcon>
+                </IconButton>
+                <span className="text-sm font-semibold text-gray-800 tracking-tight normal-case!">
+                  {postData.User?.name}
+                </span>
+              </div>
               <div className="flex gap-2">
                 <IconButton>
                   {postData.userId === parseInt(adminId) ? (
