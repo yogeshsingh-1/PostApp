@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import Axios from "../utils/axiox.utils";
 import Comments from "./Comments";
 import EditOffIcon from "@mui/icons-material/EditOff";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 const SinglePost = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -119,8 +120,16 @@ const SinglePost = () => {
                   )}
                 </IconButton>
 
-                <IconButton className="text-red-500! hover:bg-gray-300!">
-                  <Delete />
+                <IconButton>
+                  {postData.userId === parseInt(adminId) ? (
+                    // <Edit
+                    //   className="text-blue-500 cursor-pointer"
+                    //   onClick={() => navigate(`/post/update/${id}`)}
+                    // />
+                    <Delete className="text-red-500! hover:bg-gray-300!" />
+                  ) : (
+                    <DeleteForeverRoundedIcon className="cursor-not-allowed text-zinc-300" />
+                  )}
                 </IconButton>
               </div>
             </div>
