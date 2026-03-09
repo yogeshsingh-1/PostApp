@@ -17,7 +17,7 @@ const Home = () => {
 
         <div className="w-2/5 p-8 flex flex-col justify-center">
           <h2 className="text-3xl font-semibold text-zinc-800 mb-3 ">
-            Share Your Thoughts with the World
+            Share Your Thoughts with the World!
           </h2>
 
           <p className="text-zinc-400 leading-relaxed text-xs font-medium ">
