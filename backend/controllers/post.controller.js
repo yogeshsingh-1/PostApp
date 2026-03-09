@@ -77,6 +77,8 @@ class PostController {
       // Parent data (Post) हमेशा आएगा, चाहे child table (Like) में record हो या ना हो।
       // SQL में यह LEFT JOIN जैसा behave करता है।
       const postData = await this.dbService.findAll(this.post, {
+        order: [["postId", "DESC"]],
+        where: { isActive: true },
         include: [
           { model: this.user, attributes: ["name"] },
           {
@@ -89,7 +91,6 @@ class PostController {
           },
         ],
       });
-
       return res.status(200).json({ status: true, data: postData });
     } catch (e) {
       console.log(e);
@@ -119,6 +120,7 @@ class PostController {
         throw new CustomError(200, "Id is not defined");
       }
       const postData = await this.dbService.findAll(this.post, {
+        order: [["postId", "DESC"]],
         where: { userId: userId },
         include: [
           { model: this.user, attributes: ["name", "id"] },

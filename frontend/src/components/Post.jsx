@@ -74,16 +74,20 @@ const Post = ({ post }) => {
             {/* chat */}
             <IconButton
               onClick={() => navigate(`/post/${post.postId}#comment`)}
+              title="Add Comment"
             >
               {/* <Delete className="text-red-500" /> */}
               <ChatBubbleOutlineIcon />
             </IconButton>
             {/* Edit */}
-            <IconButton>
+            <IconButton
+              title={post.userId === parseInt(id) ? "Edit Post" : "No Editable"}
+            >
               {post.userId === parseInt(id) ? (
                 <Edit
                   className="text-blue-500 cursor-pointer"
                   onClick={() => navigate(`/post/update/${post.postId}`)}
+                  title="Like this post"
                 />
               ) : (
                 <EditOffIcon
