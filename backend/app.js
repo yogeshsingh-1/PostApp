@@ -14,7 +14,7 @@ const port = process.env.PORT || 5000;
 await connectDB();
 
 // 2 Attach routes AFTER middleware initialized
-app.use("/api/v1", (req, res) => res.send("Post Api Is Working"));
+// app.use("/api/v1", (req, res) => res.send("Post Api Is Working"));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/verify", authMiddleware, verifyRouter);
 app.use("/api/v1/post", authMiddleware, postRouter);
